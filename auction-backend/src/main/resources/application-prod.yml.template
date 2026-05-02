@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: auction-backend
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/auction_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: "please_change_me"
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: "please_change_me"
+    timeout: 3000ms
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+server:
+  port: 8080
+
+admin:
+  bootstrap:
+    username: admin
+    password: "please_change_me"
+    reset-password: false

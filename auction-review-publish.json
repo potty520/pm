@@ -1,0 +1,7 @@
+{
+  "title": "待审核拍品",
+  "description": "审核与搜索测试",
+  "categoryId": 9,
+  "startPrice": 2000,
+  "bidIncrement": 100
+}
