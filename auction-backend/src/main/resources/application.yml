@@ -5,11 +5,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.222.128:3306/auction_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
-    password: zkzj102426@123
+    password: password
   redis:
     host: 192.168.222.128
     port: 16379
-    password: zkzj102426
+    password: password
     timeout: 3000ms
 
 mybatis-plus:
