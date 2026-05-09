@@ -4,6 +4,7 @@ import com.auction.modules.user.dto.*;
 import com.auction.modules.user.entity.AuctionUser;
 import com.auction.modules.user.mapper.AuctionUserMapper;
 import com.auction.modules.user.service.UserService;
+import com.auction.security.JwtUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
     private final AuctionUserMapper auctionUserMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -55,7 +57,8 @@ public class UserServiceImpl implements UserService {
         if (user.getStatus() != null && user.getStatus() == 0) {
             throw new IllegalStateException("用户已被禁用");
         }
-        return new UserLoginResponse(user.getId(), user.getUsername(), "uid:" + user.getId());
+        String token = jwtUtils.generateToken(user.getId(), user.getUsername());
+        return new UserLoginResponse(user.getId(), user.getUsername(), token);
     }
 
     @Override
@@ -143,14 +146,26 @@ public class UserServiceImpl implements UserService {
         vo.setId(user.getId());
         vo.setUsername(user.getUsername());
         vo.setNickname(user.getNickname());
-        vo.setPhone(user.getPhone());
-        vo.setEmail(user.getEmail());
-        vo.setRealName(user.getRealName());
-        vo.setIdCard(user.getIdCard());
+        vo.setPhone(maskPhone(user.getPhone()));
+        vo.setEmail(maskEmail(user.getEmail()));
         vo.setAuthStatus(user.getAuthStatus());
         vo.setDeposit(user.getDeposit());
         vo.setStatus(user.getStatus());
         vo.setCreatedAt(user.getCreatedAt());
         return vo;
+    }
+
+    private static String maskPhone(String phone) {
+        if (phone == null || phone.length() < 7) return phone;
+        return phone.substring(0, 3) + "****" + phone.substring(phone.length() - 4);
+    }
+
+    private static String maskEmail(String email) {
+        if (email == null || !email.contains("@")) return email;
+        int at = email.indexOf('@');
+        String name = email.substring(0, at);
+        String domain = email.substring(at);
+        if (name.length() <= 2) return name.charAt(0) + "***" + domain;
+        return name.charAt(0) + "***" + name.charAt(name.length() - 1) + domain;
     }
 }

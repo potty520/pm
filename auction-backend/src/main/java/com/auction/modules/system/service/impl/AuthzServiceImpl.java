@@ -30,7 +30,6 @@ public class AuthzServiceImpl implements AuthzService {
     @Override
     public boolean hasPermission(Long userId, String permCode) {
         if (userId == null) return false;
-        if (userId == 1L) return true;
 
         List<SysUserRole> userRoles = userRoleMapper.selectList(
                 new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, userId)

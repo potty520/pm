@@ -1,15 +1,18 @@
 spring:
   application:
     name: auction-backend
+  sql:
+    init:
+      mode: always
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.222.128:3306/auction_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-    username: root
-    password: password
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/auction_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
   redis:
-    host: 192.168.222.128
-    port: 16379
-    password: password
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
     timeout: 3000ms
 
 mybatis-plus:
@@ -17,14 +20,15 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+jwt:
+  secret: ${JWT_SECRET:change-me-to-a-random-secret-at-least-256-bits}
+  expiration-ms: 86400000
+
 server:
   port: 8080
 
 admin:
   bootstrap:
-    # 启动时确保存在一个可登录的管理员账号（不依赖id=1）。
-    # 你可以按需改成自己的账号密码。
-    username: admin
-    password: admin123456
-    # 若用户名已存在，是否重置其密码为上述 password
-    reset-password: true
+    username: ${ADMIN_USERNAME:admin}
+    password: ${ADMIN_PASSWORD:}
+    reset-password: ${ADMIN_RESET_PASSWORD:false}

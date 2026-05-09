@@ -16,11 +16,4 @@ public final class SecurityUtils {
         return ((UserPrincipal) authentication.getPrincipal()).getUserId();
     }
 
-    /**
-     * 最小管理员规则：userId=1 视为管理员。
-     */
-    public static boolean isAdmin() {
-        Long userId = currentUserId();
-        return userId != null && userId == 1L;
-    }
 }

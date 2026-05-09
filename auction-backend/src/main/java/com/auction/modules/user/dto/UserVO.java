@@ -12,8 +12,6 @@ public class UserVO {
     private String nickname;
     private String phone;
     private String email;
-    private String realName;
-    private String idCard;
     private Integer authStatus;
     private BigDecimal deposit;
     private Integer status;

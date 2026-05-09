@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,23 +25,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .and()
-                .csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/ws/**", "/topic/**", "/app/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/auction/list", "/api/auction/item/**", "/api/auction/bids/**", "/api/auction/search", "/api/category/list", "/api/auction/session/list").permitAll()
-                .antMatchers("/api/user/register", "/api/user/login").permitAll()
-                .antMatchers("/api/auction/publish", "/api/auction/bid/**", "/api/auction/end/**", "/api/auction/review/**").authenticated()
-                .antMatchers("/api/order/**").authenticated()
-                .antMatchers("/api/admin/**").authenticated()
-                .antMatchers("/api/system/**").authenticated()
-                .antMatchers("/api/user/**").authenticated()
-                .anyRequest().permitAll()
-                .and()
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auction/list", "/api/auction/item/**",
+                                "/api/auction/bids/**", "/api/auction/search", "/api/category/list",
+                                "/api/auction/session/list").permitAll()
+                        .requestMatchers("/api/user/register", "/api/user/login").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

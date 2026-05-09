@@ -114,3 +114,25 @@ CREATE TABLE IF NOT EXISTS op_log (
   success TINYINT DEFAULT 1,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Indexes for foreign keys and frequent queries
+CREATE INDEX idx_item_status ON auction_item(status);
+CREATE INDEX idx_item_seller ON auction_item(seller_id);
+CREATE INDEX idx_item_category ON auction_item(category_id);
+CREATE INDEX idx_item_session ON auction_item(session_id);
+CREATE INDEX idx_item_start_time ON auction_item(start_time);
+
+CREATE INDEX idx_bid_item ON bid_record(item_id);
+CREATE INDEX idx_bid_user ON bid_record(user_id);
+CREATE INDEX idx_bid_time ON bid_record(bid_time);
+
+CREATE INDEX idx_order_buyer ON auction_order(buyer_id);
+CREATE INDEX idx_order_seller ON auction_order(seller_id);
+CREATE INDEX idx_order_item ON auction_order(item_id);
+CREATE INDEX idx_order_status ON auction_order(status);
+
+CREATE INDEX idx_user_status ON auction_user(status);
+CREATE INDEX idx_user_username ON auction_user(username);
+
+CREATE INDEX idx_log_user ON op_log(user_id);
+CREATE INDEX idx_log_created ON op_log(created_at);
