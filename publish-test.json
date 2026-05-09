@@ -1,7 +1,0 @@
-{
-  "title": "联调测试拍品",
-  "description": "用于接口联调",
-  "startPrice": 1000,
-  "bidIncrement": 50,
-  "status": 3
-}
